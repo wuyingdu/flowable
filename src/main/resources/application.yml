@@ -8,4 +8,3 @@ flowable:
   async-executor-activate: false
 server:
   port: 8090
-
