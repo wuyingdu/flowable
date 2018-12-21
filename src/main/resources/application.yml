@@ -3,9 +3,5 @@ spring:
     url: jdbc:mysql://localhost:3306/flowable?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
     password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
 flowable:
   async-executor-activate: false
-server:
-  port: 8090
-1231313
