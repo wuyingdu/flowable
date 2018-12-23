@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="Apply" name="库房申请单" isExecutable="true">
+    <startEvent id="start" name="开始"></startEvent>
+    <userTask id="init" name="填写申请单" flowable:assignee="wyd" flowable:candidateGroups="user1,user2">
+        <extensionElements>
+            <flowable:taskListener event="create" class="com.demo.flowable.handler.ManagerTaskHandler"/>
+        </extensionElements>
+    </userTask>
+    <userTask id="submit" name="提交申请">
+        <extensionElements>
+            <flowable:taskListener event="create" class="com.demo.flowable.handler.ManagerTaskHandler"/>
+        </extensionElements>
+    </userTask>
+    <exclusiveGateway id="audit" name="审核">
+        <extensionElements>
+            <flowable:taskListener event="create" class="com.demo.flowable.handler.BossTaskHandler"/>
+        </extensionElements>
+    </exclusiveGateway>
+    <userTask id="again" name="再次申请">
+        <extensionElements>
+            <flowable:taskListener event="create" class="com.demo.flowable.handler.ManagerTaskHandler"/>
+        </extensionElements>
+    </userTask>
+      <endEvent id="end" name="结束"></endEvent>
+    <sequenceFlow id="passLine" name="通过" sourceRef="audit" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status = 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="rejectLine" name="驳回" sourceRef="audit" targetRef="again">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status = 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+	<sequenceFlow id="sid-3A367808-5E53-4474-8BD2-1CA213C3937A" sourceRef="init" targetRef="submit"/>
+	<sequenceFlow id="sid-707C42A2-D13B-4A04-8A73-B8699FB2CA6E" sourceRef="start" targetRef="init"/>
+    <sequenceFlow id="sid-85CF2D61-D2B0-4F70-9EE0-2A4C49ABEE0E" sourceRef="submit" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status = 1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-0E08463E-5940-4776-87B0-62FC9941EA50" sourceRef="submit" targetRef="audit">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status = 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-62EC9F59-C606-41B0-BDC9-5989AD953F25" sourceRef="again" targetRef="audit"/>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Apply">
+    <bpmndi:BPMNPlane bpmnElement="Apply" id="BPMNPlane_Apply">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="60.0" y="75.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="init" id="BPMNShape_init">
+        <omgdc:Bounds height="80.0" width="100.0" x="165.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="submit" id="BPMNShape_submit">
+        <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="audit" id="BPMNShape_audit">
+        <omgdc:Bounds height="40.0" width="40.0" x="549.0" y="69.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="735.0" y="75.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="again" id="BPMNShape_again">
+        <omgdc:Bounds height="80.0" width="100.0" x="519.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-0E08463E-5940-4776-87B0-62FC9941EA50" id="BPMNEdge_sid-0E08463E-5940-4776-87B0-62FC9941EA50">
+        <omgdi:waypoint x="429.95000000000005" y="89.86807387862797"></omgdi:waypoint>
+        <omgdi:waypoint x="549.5526315789468" y="89.55250000000001"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="passLine" id="BPMNEdge_passLine">
+        <omgdi:waypoint x="588.4976130653195" y="89.44692737430168"></omgdi:waypoint>
+        <omgdi:waypoint x="735.0000509519111" y="89.03885785194566"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-85CF2D61-D2B0-4F70-9EE0-2A4C49ABEE0E" id="BPMNEdge_sid-85CF2D61-D2B0-4F70-9EE0-2A4C49ABEE0E">
+        <omgdi:waypoint x="380.0" y="50.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="19.0"></omgdi:waypoint>
+        <omgdi:waypoint x="749.0" y="19.0"></omgdi:waypoint>
+        <omgdi:waypoint x="749.0" y="75.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-707C42A2-D13B-4A04-8A73-B8699FB2CA6E" id="BPMNEdge_sid-707C42A2-D13B-4A04-8A73-B8699FB2CA6E">
+        <omgdi:waypoint x="89.94999906759469" y="90.0"></omgdi:waypoint>
+        <omgdi:waypoint x="164.99999999999375" y="90.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-3A367808-5E53-4474-8BD2-1CA213C3937A" id="BPMNEdge_sid-3A367808-5E53-4474-8BD2-1CA213C3937A">
+        <omgdi:waypoint x="264.95000000000005" y="90.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="90.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-62EC9F59-C606-41B0-BDC9-5989AD953F25" id="BPMNEdge_sid-62EC9F59-C606-41B0-BDC9-5989AD953F25">
+        <omgdi:waypoint x="519.0" y="220.0"></omgdi:waypoint>
+        <omgdi:waypoint x="478.0" y="220.0"></omgdi:waypoint>
+        <omgdi:waypoint x="478.0" y="89.0"></omgdi:waypoint>
+        <omgdi:waypoint x="549.0" y="89.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="rejectLine" id="BPMNEdge_rejectLine">
+        <omgdi:waypoint x="569.4269230769231" y="108.51554573405072"></omgdi:waypoint>
+        <omgdi:waypoint x="569.1530651340996" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
