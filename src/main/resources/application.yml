@@ -1,7 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/flowable?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    url: jdbc:mysql://wuyingdu.cn:3306/flowable?characterEncoding=utf8
     username: root
-    password: 123456
+    password: Missxiao521..
+    driver-class-name: com.mysql.cj.jdbc.Driver
 flowable:
   async-executor-activate: false
+  database-schema-update: true

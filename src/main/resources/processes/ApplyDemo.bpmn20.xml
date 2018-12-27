@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="ApplyDemo" name="ApplyDemo" isExecutable="true">
+    <startEvent id="start" name="开始"></startEvent>
+    <userTask id="init" name="填写申请单"></userTask>
+    <sequenceFlow id="sid-D9A3D19D-9BB9-4A40-B2B6-5D2A2C4E8591" sourceRef="start" targetRef="init"/>
+    <exclusiveGateway id="sid-A801BC61-A8C7-4FA6-BE5D-94920B570F9B" name="提交">
+
+    </exclusiveGateway>
+    <endEvent id="end" name="结束"></endEvent>
+    <exclusiveGateway id="sid-193E1E3E-308A-4044-A9AE-3A7D5AF2E212" name="审核">
+
+    </exclusiveGateway>
+    <userTask id="apply" name="再次申请"></userTask>
+    <sequenceFlow id="sid-7CF29BA6-5601-4272-A759-38C9A4E88771" sourceRef="init" targetRef="sid-A801BC61-A8C7-4FA6-BE5D-94920B570F9B"/>
+    <sequenceFlow id="sid-431E0293-8AEF-4C6F-9C6F-9FB4FFC523ED" name="无需审核" sourceRef="sid-A801BC61-A8C7-4FA6-BE5D-94920B570F9B" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-E80EA457-672E-4852-A9B0-92ACF8FABF15" name="需要审核" sourceRef="sid-A801BC61-A8C7-4FA6-BE5D-94920B570F9B" targetRef="sid-193E1E3E-308A-4044-A9AE-3A7D5AF2E212">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="pass" name="审核通过" sourceRef="sid-193E1E3E-308A-4044-A9AE-3A7D5AF2E212" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status=='pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-F0FAD5DB-39A3-40EF-8713-2BB19B52740F" sourceRef="apply" targetRef="sid-193E1E3E-308A-4044-A9AE-3A7D5AF2E212"/>
+    <sequenceFlow id="reject" name="驳回" sourceRef="sid-193E1E3E-308A-4044-A9AE-3A7D5AF2E212" targetRef="apply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status=='reject'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ApplyDemo">
+    <bpmndi:BPMNPlane bpmnElement="ApplyDemo" id="BPMNPlane_ApplyDemo">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="60.0" y="135.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="init" id="BPMNShape_init">
+        <omgdc:Bounds height="80.0" width="100.0" x="225.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-A801BC61-A8C7-4FA6-BE5D-94920B570F9B" id="BPMNShape_sid-A801BC61-A8C7-4FA6-BE5D-94920B570F9B">
+        <omgdc:Bounds height="40.0" width="40.0" x="465.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="696.5" y="136.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-193E1E3E-308A-4044-A9AE-3A7D5AF2E212" id="BPMNShape_sid-193E1E3E-308A-4044-A9AE-3A7D5AF2E212">
+        <omgdc:Bounds height="40.0" width="40.0" x="465.0" y="257.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="apply" id="BPMNShape_apply">
+        <omgdc:Bounds height="80.0" width="100.0" x="285.0" y="237.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-7CF29BA6-5601-4272-A759-38C9A4E88771" id="BPMNEdge_sid-7CF29BA6-5601-4272-A759-38C9A4E88771">
+        <omgdi:waypoint x="324.949999999831" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="465.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-431E0293-8AEF-4C6F-9C6F-9FB4FFC523ED" id="BPMNEdge_sid-431E0293-8AEF-4C6F-9C6F-9FB4FFC523ED">
+        <omgdi:waypoint x="504.4879674977602" y="150.45768374164808"></omgdi:waypoint>
+        <omgdi:waypoint x="696.5000300306638" y="150.0310000826169"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="pass" id="BPMNEdge_pass">
+        <omgdi:waypoint x="498.23404255319144" y="270.2659574468085"></omgdi:waypoint>
+        <omgdi:waypoint x="698.3175697092556" y="156.87872224641836"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="reject" id="BPMNEdge_reject">
+        <omgdi:waypoint x="465.43333333333334" y="277.43333333333334"></omgdi:waypoint>
+        <omgdi:waypoint x="384.95000000000005" y="277.1659468438539"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-E80EA457-672E-4852-A9B0-92ACF8FABF15" id="BPMNEdge_sid-E80EA457-672E-4852-A9B0-92ACF8FABF15">
+        <omgdi:waypoint x="485.42460317460313" y="169.51762490087233"></omgdi:waypoint>
+        <omgdi:waypoint x="485.0785433070866" y="257.0787401574803"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-D9A3D19D-9BB9-4A40-B2B6-5D2A2C4E8591" id="BPMNEdge_sid-D9A3D19D-9BB9-4A40-B2B6-5D2A2C4E8591">
+        <omgdi:waypoint x="89.94999954302153" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="225.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-F0FAD5DB-39A3-40EF-8713-2BB19B52740F" id="BPMNEdge_sid-F0FAD5DB-39A3-40EF-8713-2BB19B52740F">
+        <omgdi:waypoint x="335.0" y="316.95000000000005"></omgdi:waypoint>
+        <omgdi:waypoint x="335.0" y="378.0"></omgdi:waypoint>
+        <omgdi:waypoint x="485.0" y="378.0"></omgdi:waypoint>
+        <omgdi:waypoint x="485.0" y="296.9098364717542"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
